@@ -16,6 +16,13 @@ IMAGE_MAGICK_VERSION="${IMAGE_MAGICK_VERSION:-7.1.1-29}"
 CACHE_FILE="$CACHE_DIR/imagemagick-$IMAGE_MAGICK_VERSION.tar.gz"
 
 if [ ! -f $CACHE_FILE ]; then
+  echo "-----> Install ImageMagick with libheif support"
+
+  # Install dependencies
+  echo "-----> Installing dependencies"
+  apt-get update
+  apt-get install -y libheif-dev
+
   # install imagemagick
   IMAGE_MAGICK_FILE="ImageMagick-$IMAGE_MAGICK_VERSION.tar.xz"
   IMAGE_MAGICK_DIR="ImageMagick-$IMAGE_MAGICK_VERSION"
@@ -37,7 +44,7 @@ if [ ! -f $CACHE_FILE ]; then
   cd $IMAGE_MAGICK_DIR
   export CPPFLAGS="-I$INSTALL_DIR/include"
   export LDFLAGS="-L$INSTALL_DIR/lib"
-  ./configure --prefix=$INSTALL_DIR --without-gvc
+  ./configure --prefix=$INSTALL_DIR --without-gvc --with-heic=yes
   make && make install
   cd ..
   rm -rf $IMAGE_MAGICK_DIR
